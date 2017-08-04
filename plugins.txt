@@ -1,0 +1,8 @@
+maven-plugin:2.15.1
+bitbucket:1.1.5
+artifactory:2.10.3
+sonar:2.6.1
+kubernetes:0.11
+google-source-plugin
+google-oauth-plugin
+google-metadata-plugin

@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: jenkins
+spec:
+  serviceName: jenkins
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: jenkins
+        app: jenkins
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: jenkins
+        image: bujail/private:jenkins-new
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 8080
+          name: ui
+        - containerPort: 50000
+          name: slave
+        volumeMounts:
+        - name: jenkins
+          mountPath: /var/jenkins_home
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1500Mi
+          requests:
+            cpu: 500m
+            memory: 1500Mi
+      imagePullSecrets:
+      - name: regsecret 
+  volumeClaimTemplates:
+  - metadata:
+      name: jenkins
+      annotations:
+        volume.beta.kubernetes.io/storage-class: jenkins
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi 
